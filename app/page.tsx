@@ -2,7 +2,8 @@
 import html2canvas from 'html2canvas'
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
-
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
 export default function AttendancePage() {
   const [className, setClassName] = useState('Class 1')
   const [newName, setNewName] = useState('')
@@ -73,12 +74,16 @@ export default function AttendancePage() {
   }
 
   const exportElementAsImage = async (elementId: string, fileName: string) => {
-    const element = document.getElementById(elementId)
-    if (!element) return
-    const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 })
-    const link = document.createElement('a')
-    link.href = canvas.toDataURL("image/png"); link.download = fileName; link.click()
-  }
+  // This ensures html2canvas only runs in the browser
+  const html2canvas = (await import('html2canvas')).default
+  const element = document.getElementById(elementId)
+  if (!element) return
+  const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 })
+  const link = document.createElement('a')
+  link.href = canvas.toDataURL("image/png")
+  link.download = fileName
+  link.click()
+}
 
   if (loading) return <p style={{ textAlign: 'center', padding: '50px' }}>Loading Aljamea Portal...</p>
 
