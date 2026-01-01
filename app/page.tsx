@@ -1,7 +1,7 @@
 "use client"
 import html2canvas from 'html2canvas'
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase } from './lib/supabase'
 
 export default function AttendancePage() {
   const [className, setClassName] = useState('Class 1')
